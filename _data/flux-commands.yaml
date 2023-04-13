@@ -1,0 +1,152 @@
+commands:
+  - name: flux submit
+    groups:
+      - name: Basic job submission
+        items:
+          - title: Submit a sleep job
+            command: flux submit sleep 60
+          - title: Submit a job and watch the output
+            command: flux submit --watch ./interesting-job.sh
+          - title: Submit a job to run on 2 nodes, 4 tasks, and 2 cores per task
+            command: flux submit --nodes=2 --ntasks=4 --cores-per-task=2 ./script.sh
+          - title: Submit a named job to queue jellybelly
+            command: flux submit --queue=jellybelly --name=buttered-popcorn ./script.sh
+          - title: Submit with a dry run to see the jobspec
+            command: flux submit --dry-run ./highly-suspicious-job.sh
+          - title: Bypass the key value store and write output to file with jobid
+            command: flux submit --output=job-{{id}}.out ./my_super_cool_job.py
+          - title: Make a job waitable
+            command: flux submit --flags waitable ./wait-for-me.sh
+          - title: Wait for all jobs
+            command: flux job wait --all
+
+  - name: flux run
+    groups:
+      - name: Basic interactive jobs
+        items:
+          - title: Run a job to print the hostname
+            command: flux run hostname
+          - title: Run an interactive sleep job
+            command: flux run bash -c "echo start; sleep 5; echo done"
+          - title: Run an MPI task with options for MPI
+            command: flux run -N 1 -n 4 -c 10 -g 1 -o mpi=spectrum -o cpu-affinity=per-task -o gpu-affinity=per-task my_mpi_binary
+          - title: Remove the entire environment except for PATH 
+            command: flux run --env-remove=* --env=PATH ./top-secret.sh
+
+
+  - name: flux jobs
+    groups:
+      - name: Basic interaction with jobs
+        items:
+          - title: See all my flux jobs
+            command: flux jobs -a
+          - title: Get a return code for a specific job 
+            command: flux jobs --no-header -o '{returncode}' ƒj4CgebBV           
+          - title: Add another field, status
+            command: flux jobs --no-header -o '{status}:{returncode}' ƒj4CgebBV
+          - title: Show me the job ids in a particular state
+            command: flux jobs --filter=pending,running,inactive -o "{id}"
+          - title: Get the ID of the last submit job
+            command: flux job last
+
+  - name: flux start
+    groups:
+      - name: Basic start of a Flux instance
+        items:
+          - title: Start a test instance of size 4
+            command: flux start --test-size=4
+
+  - name: flux proxy
+    groups:
+      - name: Outside a flux instance
+        items:
+          - title: Connect to a running flux instance
+            command: flux proxy local:///run/flux/local bash
+          - title: Issue a command to a running flux instance
+            command: flux proxy local:///run/flux/local ./script.sh
+
+      - name: Inside a flux instance
+        items:
+          - title: Get the active FLUX_URI (socket)
+            command: echo $FLUX_URI
+          
+  - name: flux resources
+    groups:
+      - name: Inspect the resources available to you
+        items:
+          - title: View the current instance nodes and statuses
+            command: flux resource list
+          - title: View the status of the flux overlay network
+            command: flux overlay status
+          - title: How long has my flux resource been up?
+            command: flux uptime
+
+  - name: flux batch
+    groups:
+      - name: Run batch scripts
+        items:
+          - title: Submit a batch script wrapper in /bin/sh
+            command: flux batch --job-name=test-name --wrap ./batch.sh
+          - title: Example of wrapped batch script
+            command: |
+              #!/bin/sh
+              # flux: -N4 -n16
+              flux run -n16 hostname
+          - title: Example of batch script with submission directives
+            command: |
+              #flux: -N4
+              #flux: --job-name=name
+              flux run -N4 hostname
+
+  - name: flux cancel
+    groups:
+      - name: Basic job cancelling
+        items:
+          - title: Cancel a job based on ID
+            command: flux job cancel 123456
+          - title: Cancel all jobs and don't ask for confirmation
+            command: flux job cancelall -f
+          - title: Cancel jobs for user meatballs
+            command: flux job cancel --user meatball
+          - title: Cancel jobs in a state (e.g., running)
+            command: flux cancel --states=RUN
+
+  - name: flux alloc
+    groups:
+      - name: Create basic allocations
+        items:
+          - title: Create an interactive allocation with two nodes
+            command: flux alloc -N 2 --queue=foo
+          - title: Create an allocation in the background with two nodes on queue 'foo'
+            command: flux alloc --bg -N 2 --queue=foo
+            
+  - name: flux advanced
+    groups:
+      - name: Debugging
+        items:
+          - title: Look at flux debug messages
+            command: flux dmesg
+          - title: Look at flux debug messages in a human readable format
+            command: flux dmesg --human
+
+      - name: Queue and Archive
+        items:
+          - title: Stop the queue, wait for running jobs to finish, and dump an archive.
+            command: |
+              flux queue stop
+              flux queue idle
+              flux dump ./archive.tar.gz
+            
+      - name: Moving Files
+        items:
+          - title: Example batch script to use filemap to stage and clean up a file
+            last: true
+            command: |
+              flux filemap map -C /data mpi.sif
+              # This skips rank 0, since the file is already there
+              flux exec -x 0 -r all flux filemap get -C /data
+              flux submit -n 4 --output /tmp/fluxout/job.out --error /tmp/fluxout/job.out --flags waitable singularity exec /data/mpi.sif /opt/mpitest
+              # This is important to have so we wait for jobs to finish!
+              flux queue idle
+              flux filemap unmap
+            

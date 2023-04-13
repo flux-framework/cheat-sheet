@@ -1,0 +1,14 @@
+---
+layout: null
+permalink: /data.json
+---
+[{% for group in site.data.flux-commands.commands %}{% for subgroup in group.groups %}{% for item in subgroup.items %}{
+        "id": "{{ item.title | sha1 }}",
+        "title": {{ item.title | jsonify }},
+        "command": {{ item.command | jsonify }},
+        "category": {{ subgroup.name | jsonify }},
+        "group": {{ group.name | jsonify }},
+        "url": "{{ site.url }}{{ site.baseurl }}"
+    }{% if item.last %}{% else %},{% endif %}{% endfor %}{% endfor %}{% endfor %}
+]
+

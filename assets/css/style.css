@@ -1,0 +1,39 @@
+body {
+  padding: 20px;
+  color: #FFF;
+  background-color: #2e303e;
+}
+
+.breadcrumbs {
+  float: right;
+  padding-right: 100px;
+  padding-top: 10px;
+  color: #ccc;
+  padding-bottom:20px;
+}
+
+a {
+  color: #036291;
+}
+
+h2 {
+  color: #90c2d8;
+}
+
+.logo {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 10;  
+}
+
+.comment {
+ color: #90c2d8
+}
+
+blockquote {
+  margin: 20px 0;
+  padding: 20px;
+  color: white;
+  background-color: #2094f3;
+}
