@@ -103,11 +103,11 @@ commands:
       - name: Basic job cancelling
         items:
           - title: Cancel a job based on ID
-            command: flux job cancel 123456
-          - title: Cancel all jobs and don't ask for confirmation
-            command: flux job cancelall -f
-          - title: Cancel jobs for user meatballs
-            command: flux job cancel --user meatball
+            command: flux cancel 123456
+          - title: Cancel all jobs
+            command: flux cancel --all
+          - title: Cancel jobs for user meatball
+            command: flux cancel --user meatball
           - title: Cancel jobs in a state (e.g., running)
             command: flux cancel --states=RUN
 
