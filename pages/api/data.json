@@ -1,9 +1,9 @@
 ---
 layout: null
-permalink: /data.json
+permalink: /api/data.json
 ---
 [{% for group in site.data.flux-commands.commands %}{% for subgroup in group.groups %}{% for item in subgroup.items %}{
-        "id": "{{ item.title | sha1 }}",
+        "id": "{{ item.title | slugify }}",
         "title": {{ item.title | jsonify }},
         "command": {{ item.command | jsonify }},
         "category": {{ subgroup.name | jsonify }},

@@ -1,0 +1,16 @@
+---
+layout: null
+permalink: /api/groups.json
+---
+[{% for group in site.data.flux-commands.commands %}{
+    "name": {{ group.name |jsonify }},
+    "groups": [{% for subgroup in group.groups %}{
+       "name": {{ subgroup.name | jsonify }},
+       "items": [{% for item in subgroup.items %}{
+          "id": "{{ item.title | slugify }}",
+          "title": {{ item.title | jsonify }},
+          "command": {{ item.command | jsonify }},
+          "category": {{ subgroup.name | jsonify }},
+          "url": "{{ site.url }}{{ site.baseurl }}"
+        }{% if forloop.last %}{% else %},{% endif %}{% endfor %}]}{% if forloop.last %}{% else %},{% endif %}{% endfor %}]}{% if forloop.last %}{% else %},{% endif %}{% endfor %}]
+
