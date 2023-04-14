@@ -46,7 +46,7 @@ commands:
             command: flux jobs --no-header -o '{status}:{returncode}' ƒj4CgebBV
           - title: Show me the job ids in a particular state
             command: flux jobs --filter=pending,running,inactive -o "{id}"
-          - title: Get the ID of the last submit job
+          - title: Get the ID of the last submitted job
             command: flux job last
 
   - name: flux start
