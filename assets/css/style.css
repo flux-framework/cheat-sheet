@@ -5,11 +5,15 @@ body {
 }
 
 .breadcrumbs {
-  float: right;
   padding-right: 100px;
-  padding-top: 10px;
+  top: 10px;
   color: #ccc;
   padding-bottom:20px;
+  position: sticky;
+}
+
+.fluxcode {
+  cursor: pointer;
 }
 
 a {
