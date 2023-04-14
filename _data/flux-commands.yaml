@@ -46,7 +46,7 @@ commands:
             command: flux jobs --no-header -o '{status}:{returncode}' ƒj4CgebBV
           - title: Show me the job ids in a particular state
             command: flux jobs --filter=pending,running,inactive -o "{id}"
-          - title: Get the ID of the last submit job
+          - title: Get the ID of the last submitted job
             command: flux job last
 
   - name: flux start
@@ -103,11 +103,11 @@ commands:
       - name: Basic job cancelling
         items:
           - title: Cancel a job based on ID
-            command: flux job cancel 123456
-          - title: Cancel all jobs and don't ask for confirmation
-            command: flux job cancelall -f
-          - title: Cancel jobs for user meatballs
-            command: flux job cancel --user meatball
+            command: flux cancel 123456
+          - title: Cancel all jobs
+            command: flux cancel --all
+          - title: Cancel jobs for user meatball
+            command: flux cancel --user meatball
           - title: Cancel jobs in a state (e.g., running)
             command: flux cancel --states=RUN
 
