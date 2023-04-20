@@ -13,12 +13,20 @@ commands:
             command: flux submit --queue=jellybelly --name=buttered-popcorn ./script.sh
           - title: Submit with a dry run to see the jobspec
             command: flux submit --dry-run ./highly-suspicious-job.sh
+
+      - name: Advanced job submission
+        items:
+          - title: Use flux carbon copy to submit identical jobs with different inputs
+            command: flux submit --cc="1-10" echo "Hello I am job {cc}"
+          - title: Submits scripts myscript1.sh through myscript10.sh  
+            command: flux submit --cc=1-10 myscript{cc}.sh
           - title: Bypass the key value store and write output to file with jobid
             command: flux submit --output=job-{{id}}.out ./my_super_cool_job.py
           - title: Make a job waitable
             command: flux submit --flags waitable ./wait-for-me.sh
           - title: Wait for all jobs
             command: flux job wait --all
+
 
   - name: flux run
     groups:
@@ -48,6 +56,8 @@ commands:
             command: flux jobs --filter=pending,running,inactive -o "{id}"
           - title: Get the ID of the last submitted job
             command: flux job last
+          - title: Get the output of the last submitted job
+            command: flux job attach $(flux job last)
 
   - name: flux start
     groups:
@@ -119,7 +129,42 @@ commands:
             command: flux alloc -N 2 --queue=foo
           - title: Create an allocation in the background with two nodes on queue 'foo'
             command: flux alloc --bg -N 2 --queue=foo
-            
+
+  - name: flux bulksubmit
+    groups:
+      - name: Format String Examples
+        items:
+          - title: Pipe inputs into flux bulksubmit
+            command: seq 1 4 | flux bulksubmit echo {}
+          - title: "Map the same inputs on the command line using GNU parallel-style ::: separator"
+            command: "flux bulksubmit echo {} ::: 1 2 3 4"
+          - title: Remove the extension of the input string (e.g., one)
+            command: "flux bulksubmit echo {.%} ::: one.txt two.txt three.txt"
+          - title: Get the basename of the input string (e.g., path.txt)
+            command: "flux bulksubmit echo {./} ::: /long/file/path.txt /long/file/filename.txt"
+          - title: Combine the two - get the basename with extension removed (e.g., path)
+            command: "flux bulksubmit echo {./%} ::: /long/file/path.txt /long/file/filename.txt"
+          - title: Get the directory name of the input string (e.g., /long/file)
+            command: "flux bulksubmit echo {.//} ::: /long/file/path.txt /long/file/filename.txt"
+          - title: Get the input sequence number, start counting at 0
+            command: "flux bulksubmit echo {seq} ::: 1 2 3 4"
+          - title: Get the input sequence number, start counting at 1 (you monster)
+            command: "flux bulksubmit echo {seq1} ::: 1 2 3 4"
+          - title: Define a custom counter called p2
+            command: "flux bulksubmit --dry-run --define=p2='2**int(x)' -n {.p2} hostname \
+   ::: $(seq 0 4)"
+
+      - name: Simple Examples
+        items:
+          - title: Compress every file under ./mydir in parallel, one process per core
+            command: find ./mydir | flux bulksubmit --wait xz {} 
+          - title: Do a dry run and provide multiple inputs
+            command: "flux bulksubmit --dry-run /bin/bash -c 'mkdir -p ./mydir/{0}/{1}; echo created mydir/{0}/{1}' ::: a b c d ::: {1..4}"
+          - title: Use carbon copy to submit identical jobs with different inputs
+            command: "flux bulksubmit --dry-run --cc={0} echo {1} ::: a b c ::: 0-1 0-3 0-7"
+          - title: Similar functionality with using the seq command over a different range
+            command: "flux bulksubmit echo 'Hello I am job {}' ::: $(seq 1 10)"
+
   - name: flux advanced
     groups:
       - name: Debugging
