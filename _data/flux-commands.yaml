@@ -44,7 +44,7 @@ commands:
 
   - name: flux jobs
     groups:
-      - name: Basic interaction with jobs
+      - name: Basic job listing tool
         items:
           - title: See all my flux jobs
             command: flux jobs -a
@@ -54,6 +54,11 @@ commands:
             command: flux jobs --no-header -o '{status}:{returncode}' ƒj4CgebBV
           - title: Show me the job ids in a particular state
             command: flux jobs --filter=pending,running,inactive -o "{id}"
+
+  - name: flux job
+    groups:
+      - name: Basic interaction with jobs
+        items:
           - title: Get the ID of the last submitted job
             command: flux job last
           - title: Get the output of the last submitted job
