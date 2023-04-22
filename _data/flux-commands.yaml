@@ -63,6 +63,8 @@ commands:
             command: flux job last
           - title: Get the output of the last submitted job
             command: flux job attach $(flux job last)
+          - title: Send a signal to a specific job
+            command: flux job kill --signal=SIGUSR1 ƒj4CgebBV
 
   - name: flux start
     groups:
