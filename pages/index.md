@@ -15,7 +15,7 @@ permalink: /
 {% for group in site.data.flux-commands.commands %}
 
 <a style="padding-bottom:30px" id="{{ group.name | replace: ' ', '-' }}"></a>
-<h2 style="padding-top:20px">{{ group.name }}</h2>
+<h2 class="groupname" style="padding-top:20px">{{ group.name }}</h2>
 
 {% for subgroup in group.groups %}
 

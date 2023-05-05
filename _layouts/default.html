@@ -3,7 +3,16 @@
 
 {% include header.html %}
 
+<div class="theme-switch-wrapper">
+  <label class="theme-switch" for="checkbox">
+      <input type="checkbox" id="checkbox" />
+      <div class="slider round"></div>
+</label>
+</div>    
+
 <body>
 {{ content }}
+
+{% include dark-light-mode.html %}
 </body>
 </html>
