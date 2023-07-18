@@ -122,7 +122,7 @@ commands:
           - title: Cancel a job based on ID
             command: flux cancel 123456
           - title: Cancel all jobs
-            command: flux cancel --all
+            command: flux cancelall -f
           - title: Cancel jobs for user meatball
             command: flux cancel --user meatball
           - title: Cancel jobs in a state (e.g., running)
