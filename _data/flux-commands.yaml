@@ -21,7 +21,7 @@ commands:
           - title: Submits scripts myscript1.sh through myscript10.sh  
             command: flux submit --cc=1-10 myscript{cc}.sh
           - title: Bypass the key value store and write output to file with jobid
-            command: flux submit --output=job-{{id}}.out ./my_super_cool_job.py
+            command: flux --cc=1-10 submit --output=job-{{id}}.out ./my_super_cool_job.py
           - title: Make a job waitable
             command: flux submit --flags waitable ./wait-for-me.sh
           - title: Wait for all jobs
