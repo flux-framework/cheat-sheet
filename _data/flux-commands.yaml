@@ -168,7 +168,7 @@ commands:
           - title: Do a dry run and provide multiple inputs
             command: "flux bulksubmit --dry-run /bin/bash -c 'mkdir -p ./mydir/{0}/{1}; echo created mydir/{0}/{1}' ::: a b c d ::: {1..4}"
           - title: Use carbon copy to submit identical jobs with different inputs
-            command: "flux bulksubmit --dry-run --cc={0} echo {1} ::: a b c ::: 0-1 0-3 0-7"
+            command: "flux bulksubmit --dry-run --cc={1} echo {0} ::: a b c ::: 0-1 0-3 0-7"
           - title: Similar functionality with using the seq command over a different range
             command: "flux bulksubmit echo 'Hello I am job {}' ::: $(seq 1 10)"
 
